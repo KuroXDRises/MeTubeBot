@@ -10,9 +10,9 @@ from PIL import Image
 from io import BytesIO
 
 # ---------- CONFIG ----------
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
-API_ID = int(os.environ.get("API_ID", "0"))    # optional if using Bot token only
-API_HASH = os.environ.get("API_HASH", "")     # optional
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "8304647918:AAEmLuWW9mXpyfygdUpOdAd0PxSiqgZXllI")
+API_ID = int(os.environ.get("API_ID", "21218274"))    # optional if using Bot token only
+API_HASH = os.environ.get("API_HASH", "3474a18b61897c672d315fb330edb213")     # optional
 
 APP = Client("metube_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 

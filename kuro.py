@@ -7,9 +7,9 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 
 # ---------- CONFIG ----------
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_BOT_TOKEN")
-API_ID = int(os.environ.get("API_ID", "21218274"))
-API_HASH = os.environ.get("API_HASH", "YOUR_API_HASH")
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "7391978734:AAHCn_W4UMO_spWacqNBHW96A1c6BpUX3E4")
+API_ID = int(os.environ.get("API_ID", 27548865))
+API_HASH = os.environ.get("API_HASH", "db07e06a5eb288c706d4df697b71ab61)
 
 APP = Client("metube_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 

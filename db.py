@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 # yaha apna Mongo URL daalo
-MONGO_URL = "mongodb+srv://sufyan532011:2011@bey-wars.oji9phy.mongodb.net/?retryWrites=true&w=majority&appName=Bey-Wars"
+MONGO_URL = "mongodb://sufyan532011:2011@bey-wars.oji9phy.mongodb.net/?retryWrites=true&w=majority&appName=Bey-Wars"
 
 client = MongoClient(MONGO_URL)
 db = client["metube"]   # Database ka naam jo aapne banaya

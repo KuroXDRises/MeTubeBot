@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from db import channels, generate_channel_id
 from pyrogram.enums import ParseMode
+from setup import Metube
 REGISTER_STATE = {}
 OWNER_ID = 6239769036  # Admin who will receive notifications
 

@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from db import *
-
+from pyrogram.enums import ParseMode
 @MeTube.on_message(filters.command("start"), group=1)
 async def start(client, message):
     user = message.from_user
@@ -10,5 +10,6 @@ async def start(client, message):
         caption=f"👋 **Hello {user.first_name}!**\n\n"
                 "Welcome to **MeTube** 🎥\n"
                 "Here you can download anime clips, episodes & more!\n\n"
-                "🔥 Send me **link** or **anime name** to start."
+                "🔥 Send me **link** or **anime name** to start.",
+        parse_mode=ParseMode.MARKDOWN
     )

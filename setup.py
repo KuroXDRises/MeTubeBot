@@ -1,5 +1,5 @@
 from pyrogram import Client
-
+import *
 MeTube = Client("MeTube",
                 api_id=27548865,
                 api_hash="db07e06a5eb288c706d4df697b71ab61",

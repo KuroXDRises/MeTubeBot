@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from db import *
 from pyrogram.enums import ParseMode
-from setup import Metube
+from bot import Metube
 @MeTube.on_message(filters.command("start"), group=1)
 async def start(client, message):
     user = message.from_user

@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from db import channels, generate_channel_id
-
+from setup import MeTube
 REGISTER_STATE = {}
 
 @MeTube.on_message(filters.command("register") & filters.private, group=2)

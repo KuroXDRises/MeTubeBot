@@ -8,3 +8,6 @@ db = client["metube"]   # Database ka naam jo aapne banaya
 users = db["users"]# Example collection
 channels = db["channels"]
 videos = db["videos"]
+def generate_channel_id():
+    import random, string
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))

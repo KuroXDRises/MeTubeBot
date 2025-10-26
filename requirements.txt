@@ -1,0 +1,4 @@
+kurigram
+telethon
+pillow
+pymongo[srv]

@@ -16,4 +16,4 @@ COPY . .
 # Expose port (optional, for webhooks if needed)
 EXPOSE 8080
 # Run bot
-CMD ["python", "metube_bot.py"]
+CMD ["python", "setup.py"]

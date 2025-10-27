@@ -3,3 +3,4 @@ telethon
 pillow
 pymongo[srv]
 tgcrypto==1.2.3
+requests

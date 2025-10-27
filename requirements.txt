@@ -2,4 +2,4 @@ kurigram
 telethon
 pillow
 pymongo[srv]
-Tgcrypto
+tgcrypto

@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.enums import ParseMode
 from bot import MeTube
 from db import *
-
+import asyncio
 DEV = [6239769036]
 
 @MeTube.on_message(filters.command("reset_all") & filters.user(DEV), group=4)

@@ -1,5 +1,5 @@
 from pyrogram import Client
-import start, register
+import start, register, reset
 from bot import MeTube
 if __name__=="__main__":
     MeTube.run()

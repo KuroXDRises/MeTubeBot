@@ -2,37 +2,59 @@ from pyrogram import filters
 from pyrogram.enums import ParseMode
 from bot import MeTube
 from db import channels
+from PIL import Image, ImageDraw, ImageFont
+from io import BytesIO
+import requests
+
+def generate_channel_card(channel):
+    # Load Base Template
+    base = Image.open("Status.jpg").convert("RGB")
+    draw = ImageDraw.Draw(base)
+
+    # --- Load Channel Profile Photo ---
+    if channel.get("pic"):
+        try:
+            r = requests.get(channel["pic"])
+            pfp = Image.open(BytesIO(r.content)).convert("RGB").resize((250, 250))
+
+            # Circle Mask for round dp
+            mask = Image.new("L", (250, 250), 0)
+            ImageDraw.Draw(mask).ellipse((0, 0, 250, 250), fill=255)
+            base.paste(pfp, (50, 80), mask) # Change position if needed
+        except:
+            pass
+
+    # Fonts (Install DejaVu Sans on server if needed)
+    font_title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 45)
+    font_stats = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
+
+    # --- Write Text on Image ---
+    draw.text((330, 100), f"{channel['channel_name']}", fill="white", font=font_title)
+    draw.text((330, 160), f"Channel ID: {channel['_id']}", fill="white", font=font_stats)
+    draw.text((330, 210), f"Videos: {channel['videos']}", fill="white", font=font_stats)
+    draw.text((330, 260), f"Subscribers: {channel['subscribers']}", fill="white", font=font_stats)
+    draw.text((330, 310), f"Views: {channel['total_views']}", fill="white", font=font_stats)
+    draw.text((330, 360), f"Likes: {channel['likes']}", fill="white", font=font_stats)
+
+    # Save Output
+    output = BytesIO()
+    output.name = "my_channel_status.jpg"
+    base.save(output, "JPEG")
+    output.seek(0)
+    return output
 
 @MeTube.on_message(filters.command("my_channel") & filters.private, group=5)
 async def my_channel(client, message):
     user_id = message.from_user.id
-    
-    # Check channel exists
     channel = channels.find_one({"owner_id": user_id})
+
     if not channel:
         return await message.reply("❌ You haven't registered any channel yet!\nUse: `/register`")
 
-    # Prepare caption
-    caption = (
-        f"📺 **Your Channel Information**\n\n"
-        f"🔹 **Channel Name:** `{channel['channel_name']}`\n"
-        f"🆔 **Channel ID:** `{channel['_id']}`\n"
-        f"📄 **Description:** {channel['desc']}\n\n"
-        f"🎞 **Videos:** `{channel['videos']}`\n"
-        f"👥 **Subscribers:** `{channel['subscribers']}`\n"
-        f"👀 **Total Views:** `{channel['total_views']}`\n"
-        f"❤️ **Likes:** `{channel['likes']}`\n"
-    )
+    card = generate_channel_card(channel)
 
-    # Send with profile picture if exists
-    if channel.get("pic"):
-        try:
-            await message.reply_photo(
-                channel["pic"],
-                caption=caption,
-                parse_mode=ParseMode.MARKDOWN
-            )
-        except:
-            await message.reply(caption, parse_mode=ParseMode.MARKDOWN)
-    else:
-        await message.reply(caption, parse_mode=ParseMode.MARKDOWN)
+    await message.reply_photo(
+        photo=card,
+        caption=f"✅ **Your Channel Stats Generated!**",
+        parse_mode=ParseMode.MARKDOWN
+    )

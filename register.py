@@ -37,10 +37,12 @@ async def register_steps(client, message):
 
     # Step 2 — Profile Picture
     if step == 2:
-        if message.text.lower() == "skip":
-            REGISTER_STATE[user_id]["pic"] = None
         elif message.photo:
             REGISTER_STATE[user_id]["pic"] = message.photo.id
+            
+        if message.text.lower() == "skip":
+            REGISTER_STATE[user_id]["pic"] = None
+        
         else:
             return await message.reply("⚠️ Send a photo or type `skip`.")
 

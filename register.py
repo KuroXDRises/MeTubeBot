@@ -55,10 +55,10 @@ async def register_steps(client, message):
 
     # Step 4 — Banner
     if step == 4:
-        if message.text.lower() == "skip":
-            REGISTER_STATE[user_id]["banner"] = None
-        elif message.photo:
+        if message.photo:
             REGISTER_STATE[user_id]["banner"] = message.photo.file_id
+        elif message.text.lower() == "skip":
+            REGISTER_STATE[user_id]["banner"] = None
         else:
             return await message.reply("⚠️ Send a photo or type `skip`.")
 

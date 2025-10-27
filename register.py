@@ -17,7 +17,7 @@ async def register_start(client, message):
     await message.reply("📌 **Step 1:** Enter your **Channel Name** (No stylish letters):")
 
 
-@MeTube.on_message(filters.text & filters.private, group=3)
+@MeTube.on_message((filters.text | filters.photo) & filters.photo & filters.private, group=3)
 async def register_steps(client, message):
     user_id = message.from_user.id
 
@@ -40,7 +40,7 @@ async def register_steps(client, message):
         if message.text.lower() == "skip":
             REGISTER_STATE[user_id]["pic"] = None
         elif message.photo:
-            REGISTER_STATE[user_id]["pic"] = message.photo.file_id
+            REGISTER_STATE[user_id]["pic"] = message.photo.id
         else:
             return await message.reply("⚠️ Send a photo or type `skip`.")
 

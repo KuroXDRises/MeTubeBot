@@ -37,10 +37,10 @@ async def register_steps(client, message):
 
     # Step 2 — Profile Picture
     if step == 2:
-        elif message.photo:
+        if message.photo:
             REGISTER_STATE[user_id]["pic"] = message.photo.id
             
-        if message.text.lower() == "skip":
+        elif message.text.lower() == "skip":
             REGISTER_STATE[user_id]["pic"] = None
         
         else:

@@ -5,7 +5,7 @@ from db import *
 
 DEV = [6239769036]
 
-@MeTube.on_message(filters.command("reset_all") & filters.user(DEV))
+@MeTube.on_message(filters.command("reset_all") & filters.user(DEV), group=4)
 async def reset_all(_, message):
     m = await message.reply_text("Clearing database.")
 

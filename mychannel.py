@@ -3,7 +3,7 @@ from pyrogram.enums import ParseMode
 from bot import MeTube
 from db import channels
 
-@MeTube.on_message(filters.command("my_channel") & filters.private)
+@MeTube.on_message(filters.command("my_channel") & filters.private, group=5)
 async def my_channel(client, message):
     user_id = message.from_user.id
     

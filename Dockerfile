@@ -19,4 +19,4 @@ RUN pip3 install -r requirements.txt
 EXPOSE 8080
 
 # Run bot (Make sure your main file is bot.py)
-CMD ["python", "bot.py"]
+CMD ["python", "setup.py"]

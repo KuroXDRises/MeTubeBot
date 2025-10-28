@@ -39,8 +39,8 @@ async def inline_query_handler(client, inline_query):
                 id=video['video_id'],
                 title=video['title'],
                 caption=caption,
-                photo_url=video['thumb_file_id'],
-                thumb_url=video['thumb_file_id'],
+                photo_url=video['thumb_url'],
+                thumb_url=video['thumb_url'],
                 reply_markup=buttons
             )
         )
@@ -60,7 +60,7 @@ async def inline_query_handler(client, inline_query):
                     message_text=f"/watch {vid['video_id']}"
                 ),
                 description=f"Channel: {vid.get('channelname', 'Unknown')}",
-                thumb_url=vid["thumb_file_id"]
+                thumb_url=vid["thumb_url"]
             )
         )
 

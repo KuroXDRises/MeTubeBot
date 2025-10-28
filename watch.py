@@ -1,6 +1,7 @@
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pymongo import ReturnDocument
-
+from bot import MeTube
+from db import *
 
 # ✅ WATCH CALLBACK
 @MeTube.on_callback_query(filters.regex(r"^watch_(.+)"))

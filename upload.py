@@ -31,7 +31,7 @@ async def get_thumbnail(client, message: Message):
         upload_state[user_id]["thumb"] = thumb_file_id
         
         # ✅ Convert to CDN URL
-        file = await client.get_file(thumb_file_id)
+        file = client.get_file(thumb_file_id)
         thumb_url = f"https://api.telegram.org/file/bot{client.bot_token}/{file.file_path}"
         upload_state[user_id]["thumb_url"] = thumb_url
 

@@ -12,16 +12,6 @@ async def generate_channel_card(client, channel):
     base = Image.open("IMG_20251028_063529_945.jpg").convert("RGB")
     draw = ImageDraw.Draw(base)
 
-    # --- Load Banner (optional) ---
-    if channel.get("banner"):
-        try:
-            banner_path = await client.download_media(channel["banner"])
-            banner = Image.open(banner_path).convert("RGB").resize((1080, 300))
-            base.paste(banner, (0, 0))
-            os.remove(banner_path)
-        except Exception as e:
-            print("Banner error:", e)
-
     # --- Load Channel Profile Photo ---
     if channel.get("pic"):
         try:
@@ -32,7 +22,7 @@ async def generate_channel_card(client, channel):
             mask = Image.new("L", (250, 250), 0)
             ImageDraw.Draw(mask).ellipse((0, 0, 250, 250), fill=255)
 
-            base.paste(pfp, (330, 350), mask)  # adjust position as needed
+            base.paste(pfp, (300, 300), mask)  # adjust position as needed
             os.remove(pic_path)
         except Exception as e:
             print("Pic error:", e)
@@ -44,10 +34,10 @@ async def generate_channel_card(client, channel):
     # --- Write Text on Image ---
     draw.text((460, 145), f"{channel['channel_name']}", fill="white", font=font_title)
     draw.text((460, 280), f"Channel ID: {channel['_id']}", fill="white", font=font_stats)
-    draw.text((460, 280), f"Videos: {channel['videos']}", fill="white", font=font_stats)
-    draw.text((460, 280), f"Subscribers: {channel['subscribers']}", fill="white", font=font_stats)
-    draw.text((460, 280), f"Views: {channel['total_views']}", fill="white", font=font_stats)
-    draw.text((460, 280), f"Likes: {channel['likes']}", fill="white", font=font_stats)
+    draw.text((460, 330), f"Videos: {channel['videos']}", fill="white", font=font_stats)
+    draw.text((460, 380), f"Subscribers: {channel['subscribers']}", fill="white", font=font_stats)
+    draw.text((460, 430), f"Views: {channel['total_views']}", fill="white", font=font_stats)
+    draw.text((460, 480), f"Likes: {channel['likes']}", fill="white", font=font_stats)
 
     # Save Output
     output = BytesIO()

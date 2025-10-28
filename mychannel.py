@@ -8,7 +8,7 @@ import requests
 
 def generate_channel_card(channel):
     # Load Base Template
-    base = Image.open("Status.jpg").convert("RGB")
+    base = Image.open("IMG_20251028_063529_945.jpg").convert("RGB")
     draw = ImageDraw.Draw(base)
 
     # --- Load Channel Profile Photo ---

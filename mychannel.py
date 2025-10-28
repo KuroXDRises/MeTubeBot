@@ -29,12 +29,12 @@ def generate_channel_card(channel):
     font_stats = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
 
     # --- Write Text on Image ---
-    draw.text((460, 150), f"{channel['channel_name']}", fill="black", font=font_title)
-    draw.text((460, 290), f"Channel ID: {channel['_id']}", fill="black", font=font_stats)
-    draw.text((460, 340), f"Videos: {channel['videos']}", fill="black", font=font_stats)
-    draw.text((460, 390), f"Subscribers: {channel['subscribers']}", fill="black", font=font_stats)
-    draw.text((460, 440), f"Views: {channel['total_views']}", fill="black", font=font_stats)
-    draw.text((460, 490), f"Likes: {channel['likes']}", fill="black", font=font_stats)
+    draw.text((460, 145), f"{channel['channel_name']}", fill="black", font=font_title)
+    draw.text((460, 280), f"Channel ID: {channel['_id']}", fill="black", font=font_stats)
+    draw.text((460, 330), f"Videos: {channel['videos']}", fill="black", font=font_stats)
+    draw.text((460, 380), f"Subscribers: {channel['subscribers']}", fill="black", font=font_stats)
+    draw.text((460, 430), f"Views: {channel['total_views']}", fill="black", font=font_stats)
+    draw.text((460, 480), f"Likes: {channel['likes']}", fill="black", font=font_stats)
 
     # Save Output
     output = BytesIO()

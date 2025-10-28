@@ -84,17 +84,16 @@ async def get_text_data(client, message: Message):
 
         # Final message with thumbnail + details + buttons
 
-       keyboard = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        "🔗 Share",
-                        switch_inline_query=f"{video_id}"
-                    )
-                ]
-            ]  
-        )
-
+        keyboard = InlineKeyboardMarkup(
+             [
+                 [
+                     InlineKeyboardButton(
+                         "🔗 Share",
+                         switch_inline_query=f"{video_id}"
+                     )
+                 ]
+             ]  
+         )
         await message.reply_photo(
             photo=state["thumb"],
             caption=(

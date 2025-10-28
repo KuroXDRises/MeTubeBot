@@ -1,5 +1,5 @@
 from pyrogram import Client
-import start, register, reset, mychannel, upload
+import start, register, reset, mychannel, upload, inlineQuery
 from bot import MeTube
 if __name__=="__main__":
     MeTube.run()

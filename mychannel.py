@@ -18,12 +18,30 @@ async def generate_channel_card(client, channel):
             pic_path = await client.download_media(channel["pic"])
             pfp = Image.open(pic_path).convert("RGB").resize((350, 350))
 
-            # Circle Mask for round DP
+        # Circle Mask for round DP
             mask = Image.new("L", (350, 350), 0)
-            ImageDraw.Draw(mask).ellipse((0, 0, 350, 350), fill=350)
+            ImageDraw.Draw(mask).ellipse((0, 0, 350, 350), fill=255)
 
-            base.paste(pfp, (70, 45), mask)  # adjust position as needed
+        # 🟢 Create stroke (white border)
+            stroke_width = 10  # border thickness
+            stroke_size = 350 + (stroke_width * 2)
+            stroke_img = Image.new("RGBA", (stroke_size, stroke_size), (0, 0, 0, 0))
+            stroke_draw = ImageDraw.Draw(stroke_img)
+            stroke_draw.ellipse(
+                (0, 0, stroke_size, stroke_size),
+                fill=None,
+                outline=(255, 255, 255, 255),  # white color
+                width=stroke_width
+        )
+
+        # 🟣 Paste profile pic with mask inside stroke
+            stroke_img.paste(pfp, (stroke_width, stroke_width), mask)
+
+        # 🖼 Final paste on base image
+            base.paste(stroke_img, (60, 40), stroke_img)
+
             os.remove(pic_path)
+
         except Exception as e:
             print("Pic error:", e)
 
@@ -32,12 +50,12 @@ async def generate_channel_card(client, channel):
     font_stats = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
 
     # --- Write Text on Image ---
-    draw.text((460, 145), f"{channel['channel_name']}", fill="white", font=font_title)
-    draw.text((460, 280), f"Channel ID: {channel['_id']}", fill="white", font=font_stats)
-    draw.text((460, 330), f"Videos: {channel['videos']}", fill="white", font=font_stats)
-    draw.text((460, 380), f"Subscribers: {channel['subscribers']}", fill="white", font=font_stats)
-    draw.text((460, 430), f"Views: {channel['total_views']}", fill="white", font=font_stats)
-    draw.text((460, 480), f"Likes: {channel['likes']}", fill="white", font=font_stats)
+    draw.text((460, 145), f"{channel['channel_name']}", fill="black", font=font_title)
+    draw.text((460, 280), f"Channel ID: {channel['_id']}", fill="black", font=font_stats)
+    draw.text((460, 330), f"Videos: {channel['videos']}", fill="black", font=font_stats)
+    draw.text((460, 380), f"Subscribers: {channel['subscribers']}", fill="black", font=font_stats)
+    draw.text((460, 430), f"Views: {channel['total_views']}", fill="black", font=font_stats)
+    draw.text((460, 480), f"Likes: {channel['likes']}", fill="black", font=font_stats)
 
     # Save Output
     output = BytesIO()

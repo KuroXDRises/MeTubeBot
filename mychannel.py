@@ -46,11 +46,11 @@ async def generate_channel_card(client, channel):
             print("Pic error:", e)
 
     # Fonts (Install DejaVu Sans on server if needed)
-    font_title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 45)
-    font_stats = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
+    font_title = ImageFont.truetype("TrajanPro-Bold.otf", 45)
+    font_stats = ImageFont.truetype("TrajanPro-Rugular.ttf", 32)
 
     # --- Write Text on Image ---
-    draw.text((460, 145), f"{channel['channel_name']}", fill="black", font=font_title)
+    draw.text((465, 140), f"{channel['channel_name']}", fill="black", font=font_title)
     draw.text((460, 280), f"Channel ID: {channel['_id']}", fill="black", font=font_stats)
     draw.text((460, 330), f"Videos: {channel['videos']}", fill="black", font=font_stats)
     draw.text((460, 380), f"Subscribers: {channel['subscribers']}", fill="black", font=font_stats)

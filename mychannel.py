@@ -47,7 +47,7 @@ async def generate_channel_card(client, channel):
 
     # Fonts (Install DejaVu Sans on server if needed)
     font_title = ImageFont.truetype("TrajanPro-Bold.otf", 45)
-    font_stats = ImageFont.truetype("TrajanPro-Rugular.ttf", 32)
+    font_stats = ImageFont.truetype("TrajanPro-Regular.ttf", 32)
 
     # --- Write Text on Image ---
     draw.text((465, 140), f"{channel['channel_name']}", fill="black", font=font_title)

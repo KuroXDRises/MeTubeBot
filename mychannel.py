@@ -20,9 +20,9 @@ async def generate_channel_card(client, channel):
 
             # Circle Mask for round DP
             mask = Image.new("L", (300, 300), 0)
-            ImageDraw.Draw(mask).ellipse((0, 0, 250, 250), fill=255)
+            ImageDraw.Draw(mask).ellipse((0, 0, 300, 300), fill=300)
 
-            base.paste(pfp, (250, 250), mask)  # adjust position as needed
+            base.paste(pfp, (150, 150), mask)  # adjust position as needed
             os.remove(pic_path)
         except Exception as e:
             print("Pic error:", e)

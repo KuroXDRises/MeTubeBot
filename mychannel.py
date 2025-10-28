@@ -20,7 +20,7 @@ def generate_channel_card(channel):
             # Circle Mask for round dp
             mask = Image.new("L", (250, 250), 0)
             ImageDraw.Draw(mask).ellipse((0, 0, 250, 250), fill=255)
-            base.paste(pfp, (50, 80), mask) # Change position if needed
+            base.paste(pfp, (330, 100), mask) # Change position if needed
         except:
             pass
 
@@ -29,12 +29,12 @@ def generate_channel_card(channel):
     font_stats = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
 
     # --- Write Text on Image ---
-    draw.text((330, 100), f"{channel['channel_name']}", fill="white", font=font_title)
-    draw.text((330, 160), f"Channel ID: {channel['_id']}", fill="white", font=font_stats)
-    draw.text((330, 210), f"Videos: {channel['videos']}", fill="white", font=font_stats)
-    draw.text((330, 260), f"Subscribers: {channel['subscribers']}", fill="white", font=font_stats)
-    draw.text((330, 310), f"Views: {channel['total_views']}", fill="white", font=font_stats)
-    draw.text((330, 360), f"Likes: {channel['likes']}", fill="white", font=font_stats)
+    draw.text((350, 105), f"{channel['channel_name']}", fill="white", font=font_title)
+    draw.text((350, 180), f"Channel ID: {channel['_id']}", fill="white", font=font_stats)
+    draw.text((350, 250), f"Videos: {channel['videos']}", fill="white", font=font_stats)
+    draw.text((350, 280), f"Subscribers: {channel['subscribers']}", fill="white", font=font_stats)
+    draw.text((350, 340), f"Views: {channel['total_views']}", fill="white", font=font_stats)
+    draw.text((350, 390), f"Likes: {channel['likes']}", fill="white", font=font_stats)
 
     # Save Output
     output = BytesIO()

@@ -26,17 +26,18 @@ async def get_thumbnail(client, message: Message):
     user_id = message.from_user.id
     if upload_state.get(user_id, {}).get("step") == "thumb":
         
-        # ✅ Thumbnail file ID save
+        # ✅ Save thumb file id
         thumb_file_id = message.photo.file_id
         upload_state[user_id]["thumb"] = thumb_file_id
         
-        # ✅ Convert to CDN URL
-        file = client.get_file(thumb_file_id)
+        # ✅ Convert File ID → Direct URL
+        file = await client.get_file(thumb_file_id)  # ✅ FIXED HERE
         thumb_url = f"https://api.telegram.org/file/bot{client.bot_token}/{file.file_path}"
         upload_state[user_id]["thumb_url"] = thumb_url
-
+        
         upload_state[user_id]["step"] = "title"
         await message.reply("✍️ Now send **Video Title**")
+        
 
 
 @MeTube.on_message(filters.private & filters.text)

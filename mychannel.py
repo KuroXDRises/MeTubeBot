@@ -21,20 +21,20 @@ def generate_channel_card(channel):
             mask = Image.new("L", (250, 250), 0)
             ImageDraw.Draw(mask).ellipse((0, 0, 250, 250), fill=255)
             base.paste(pfp, (330, 100), mask) # Change position if needed
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
     # Fonts (Install DejaVu Sans on server if needed)
     font_title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 45)
     font_stats = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
 
     # --- Write Text on Image ---
-    draw.text((350, 105), f"{channel['channel_name']}", fill="white", font=font_title)
-    draw.text((350, 180), f"Channel ID: {channel['_id']}", fill="white", font=font_stats)
-    draw.text((350, 250), f"Videos: {channel['videos']}", fill="white", font=font_stats)
-    draw.text((350, 280), f"Subscribers: {channel['subscribers']}", fill="white", font=font_stats)
-    draw.text((350, 340), f"Views: {channel['total_views']}", fill="white", font=font_stats)
-    draw.text((350, 390), f"Likes: {channel['likes']}", fill="white", font=font_stats)
+    draw.text((380, 110), f"{channel['channel_name']}", fill="black", font=font_title)
+    draw.text((380, 250), f"Channel ID: {channel['_id']}", fill="black", font=font_stats)
+    draw.text((380, 300), f"Videos: {channel['videos']}", fill="black", font=font_stats)
+    draw.text((380, 350), f"Subscribers: {channel['subscribers']}", fill="black", font=font_stats)
+    draw.text((380, 400), f"Views: {channel['total_views']}", fill="black", font=font_stats)
+    draw.text((380, 450), f"Likes: {channel['likes']}", fill="black", font=font_stats)
 
     # Save Output
     output = BytesIO()

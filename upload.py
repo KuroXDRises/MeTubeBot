@@ -78,10 +78,9 @@ async def get_text_data(client, message: Message):
             {"owner_id": user_id},
             {"$inc": {"videos": 1}}
         )
-        keyboard = InlineKeyboardMarkup(
-            [[InlineKeyboardButton("📤 Share Video", switch_inline_query_short=f"{video_id}")]])
-        await client.send_photo(
-            chat_id=user_id,
+        buttons = [[InlineKeyboardButton("📤 Share", switch_inline_query=video_id)]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await message.reply_photo(
             photo=state["thumb"],
             caption=(
                 f"✅ **Video Added Successfully!**\n\n"
@@ -90,9 +89,7 @@ async def get_text_data(client, message: Message):
                 f"👍 Likes: 0 | 👎 Dislikes: 0\n"
                 f"📌 Channel: **{channel_name}**\n\n"
                 f"💡 Video ID: `{video_id}`\n"
-                f"📤 Share this video with friends!\n\n"
-                f"➡️ Use the button below"
             ),
-            reply_markup=keyboard,
-            parse_mode="markdown")
+            reply_markup=reply_markup
+        )
         upload_state.pop(user_id, None)

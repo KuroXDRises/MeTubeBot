@@ -48,7 +48,7 @@ async def get_text_data(client, message: Message):
         state["desc"] = message.text
 
         # Fetch channel using owner id
-        channel = channels.find_one({"owner_id": str(user_id)})
+        channel = channels.find_one({"owner_id": user_id})
         if not channel:
             await message.reply("❌ Channel not found! Register a channel first.")
             upload_state.pop(user_id, None)

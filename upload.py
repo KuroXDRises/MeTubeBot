@@ -81,7 +81,7 @@ async def get_text_data(client, message: Message):
         keyboard = InlineKeyboardMarkup(
             [[InlineKeyboardButton("📤 Share Video", switch_inline_query_short=f"{video_id}")]])
         await client.send_photo(
-            chat_id=user_id
+            chat_id=user_id,
             photo=state["thumb"],
             caption=(
                 f"✅ **Video Added Successfully!**\n\n"

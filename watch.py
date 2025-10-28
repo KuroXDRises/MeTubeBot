@@ -5,7 +5,7 @@ from db import videos, channels
 
 
 # ✅ Send Video in watch UI
-async def send_watch_video(query, video):
+async def send_watch_video(client, query, video):
 
     channel = channels.find_one({"channel_id": video.get("channel_id")})
 
@@ -29,19 +29,27 @@ async def send_watch_video(query, video):
         ]
     ])
 
-    await query.message.reply_video(
-        video["video_file_id"],
-        caption=(
-            f"🎬 **{title}**\n"
-            f"👁 Views: {views}\n"
-            f"👍 {likes} | 👎 {dislikes}\n"
-            f"📺 Channel: **{channel_name}**"
-        ),
-        reply_markup=keyboard
+    caption = (
+        f"🎬 **{title}**\n"
+        f"👁 Views: {views}\n"
+        f"👍 {likes} | 👎 {dislikes}\n"
+        f"📺 Channel: **{channel_name}**"
     )
 
-
-# ✅ WATCH Handler
+    # ✅ Fix: query.message null handling
+    if query.message:
+        await query.message.reply_video(
+            video["video_file_id"],
+            caption=caption,
+            reply_markup=keyboard
+        )
+    else:
+        await client.send_video(
+            chat_id=query.from_user.id,
+            video=video["video_file_id"],
+            caption=caption,
+            reply_markup=keyboard
+        )
 @MeTube.on_callback_query(filters.regex(r"^watch_(.+)"))
 async def watch_callback(client, query):
     video_id = query.data.split("_")[1]
@@ -50,18 +58,15 @@ async def watch_callback(client, query):
     if not video:
         return await query.answer("Video not found ❌", show_alert=True)
 
+    # ✅ update views
     videos.update_one({"video_id": video_id}, {"$inc": {"views": 1}})
-
-    if video.get("channel_id"):
-        channels.update_one({"channel_id": video["channel_id"]}, {"$inc": {"total_views": 1}})
+    channels.update_one({"channel_id": video.get("channel_id")}, {"$inc": {"total_views": 1}})
 
     video = videos.find_one({"video_id": video_id})
-    await send_watch_video(query, video)
 
+    await send_watch_video(client, query, video)
     await query.answer()
-
-
-# ✅ LIKE Button
+    
 @MeTube.on_callback_query(filters.regex(r"^like_(.+)"))
 async def like_video(client, query):
     video_id = query.data.split("_")[1]

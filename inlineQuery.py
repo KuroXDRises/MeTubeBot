@@ -41,8 +41,7 @@ async def inline_query_handler(client, inline_query):
                 caption=caption,
                 photo_url=video['thumb_file_id'],
                 thumb_url=video['thumb_file_id'],
-                reply_markup=buttons,
-                parse_mode="markdown"
+                reply_markup=buttons
             )
         )
 

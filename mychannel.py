@@ -22,7 +22,7 @@ async def generate_channel_card(client, channel):
             mask = Image.new("L", (300, 300), 0)
             ImageDraw.Draw(mask).ellipse((0, 0, 300, 300), fill=300)
 
-            base.paste(pfp, (105, 75), mask)  # adjust position as needed
+            base.paste(pfp, (95, 70), mask)  # adjust position as needed
             os.remove(pic_path)
         except Exception as e:
             print("Pic error:", e)

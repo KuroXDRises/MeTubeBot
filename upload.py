@@ -60,16 +60,9 @@ async def get_text_data(client, message: Message):
         video_count = videos.count_documents({"channelname": channel_name}) + 1
         video_id = f"{channel_name}-{video_count}"
 
-        # Upload to actual channel
-        sent_msg = await client.send_video(
-            chat_id=message.chat.id,
-            video=state["video"],
-            thumb=state["thumb"],
-            caption=f"🎬 **{state['title']}**\n\n{state['desc']}"
-        )
+        
 
-        # Save in DB
-        # Save in DB
+# ✅ Save in Videos DB
         videos.insert_one({
             "video_id": video_id,
             "title": state["title"],
@@ -81,20 +74,14 @@ async def get_text_data(client, message: Message):
             "views": 0,
             "channelname": channel_name
         })
-
-        # Final message with thumbnail + details + buttons
-
+        channels.update_one(
+            {"owner_id": user_id},
+            {"$inc": {"videos": 1}}
+        )
         keyboard = InlineKeyboardMarkup(
-             [
-                 [
-                     InlineKeyboardButton(
-                         "🔗 Share",
-                         switch_inline_query=f"{video_id}"
-                     )
-                 ]
-             ]  
-         )
-        await message.reply_photo(
+            [[InlineKeyboardButton("📤 Share Video", switch_inline_query_short=f"{video_id}")]])
+        await client.send_photo(
+            chat_id=user_id
             photo=state["thumb"],
             caption=(
                 f"✅ **Video Added Successfully!**\n\n"
@@ -103,10 +90,9 @@ async def get_text_data(client, message: Message):
                 f"👍 Likes: 0 | 👎 Dislikes: 0\n"
                 f"📌 Channel: **{channel_name}**\n\n"
                 f"💡 Video ID: `{video_id}`\n"
-                f"🔗 **Share with your friends!**"
+                f"📤 Share this video with friends!\n\n"
+                f"➡️ Use the button below"
             ),
             reply_markup=keyboard,
-            parse_mode="markdown"
-)
-
+            parse_mode="markdown")
         upload_state.pop(user_id, None)

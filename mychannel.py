@@ -16,13 +16,13 @@ async def generate_channel_card(client, channel):
     if channel.get("pic"):
         try:
             pic_path = await client.download_media(channel["pic"])
-            pfp = Image.open(pic_path).convert("RGB").resize((300, 300))
+            pfp = Image.open(pic_path).convert("RGB").resize((310, 310))
 
             # Circle Mask for round DP
-            mask = Image.new("L", (300, 300), 0)
-            ImageDraw.Draw(mask).ellipse((0, 0, 300, 300), fill=300)
+            mask = Image.new("L", (310, 310), 0)
+            ImageDraw.Draw(mask).ellipse((0, 0, 310, 310), fill=310)
 
-            base.paste(pfp, (95, 70), mask)  # adjust position as needed
+            base.paste(pfp, (90, 65), mask)  # adjust position as needed
             os.remove(pic_path)
         except Exception as e:
             print("Pic error:", e)

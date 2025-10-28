@@ -59,7 +59,7 @@ async def get_text_data(client, message: Message):
             return
 
         channel_name = channel["channel_name"]
-
+        channel_id = channel["_id"]
         # Create unique video id
         video_count = videos.count_documents({"channelname": channel_name}) + 1
         video_id = f"{channel_name}-{video_count}"
@@ -73,7 +73,8 @@ async def get_text_data(client, message: Message):
             "likes": 0,
             "dislikes": 0,
             "views": 0,
-            "channelname": channel_name
+            "channelname": channel_name,
+            "channel_id": channel_id
         })
 
         channels.update_one(

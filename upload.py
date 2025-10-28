@@ -1,8 +1,8 @@
 from pyrogram import filters
 from db import videos, channels
 from bot import MeTube
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-
+from pyrogram.types import Message
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 upload_state = {}
 
@@ -25,38 +25,29 @@ async def get_video(client, message: Message):
 async def get_thumbnail(client, message: Message):
     user_id = message.from_user.id
     if upload_state.get(user_id, {}).get("step") == "thumb":
-        
-        # ✅ Save thumb file id
-        thumb_file_id = message.photo.file_id
-        upload_state[user_id]["thumb"] = thumb_file_id
-        
-        # ✅ Convert File ID → Direct URL
-        file = await client.get_file(thumb_file_id)  # ✅ FIXED HERE
-        thumb_url = f"https://api.telegram.org/file/bot{client.bot_token}/{file.file_path}"
-        upload_state[user_id]["thumb_url"] = thumb_url
-        
+        upload_state[user_id]["thumb"] = message.photo.file_id
         upload_state[user_id]["step"] = "title"
         await message.reply("✍️ Now send **Video Title**")
-        
 
 
 @MeTube.on_message(filters.private & filters.text)
 async def get_text_data(client, message: Message):
     user_id = message.from_user.id
     state = upload_state.get(user_id)
+
     if not state:
         return
-
+    
     if state["step"] == "title":
         state["title"] = message.text
         state["step"] = "desc"
         await message.reply("📝 Send **Video Description**")
         return
-
+    
     if state["step"] == "desc":
         state["desc"] = message.text
 
-        # ✅ Fetch Channel
+        # Fetch channel using owner id
         channel = channels.find_one({"owner_id": user_id})
         if not channel:
             await message.reply("❌ Channel not found! Register a channel first.")
@@ -65,44 +56,40 @@ async def get_text_data(client, message: Message):
 
         channel_name = channel["channel_name"]
 
-        # ✅ Generate Unique ID
+        # Generate Next Video ID
         video_count = videos.count_documents({"channelname": channel_name}) + 1
         video_id = f"{channel_name}-{video_count}"
 
-        # ✅ Save in Database
+        
+
+# ✅ Save in Videos DB
         videos.insert_one({
             "video_id": video_id,
             "title": state["title"],
             "description": state["desc"],
             "video_file_id": state["video"],
             "thumb_file_id": state["thumb"],
-            "thumb_url": state["thumb_url"],  # ✅ Important for inline mode
             "likes": 0,
             "dislikes": 0,
             "views": 0,
             "channelname": channel_name
         })
-
         channels.update_one(
             {"owner_id": user_id},
             {"$inc": {"videos": 1}}
         )
-
-        reply_markup = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📤 Share", switch_inline_query=video_id)]
-        ])
-
+        buttons = [[InlineKeyboardButton("📤 Share", switch_inline_query=video_id)]]
+        reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
             photo=state["thumb"],
             caption=(
-                "✅ **Video Added Successfully!**\n\n"
+                f"✅ **Video Added Successfully!**\n\n"
                 f"🎬 **{state['title']}**\n"
-                "👁 Views: 0\n"
-                "👍 Likes: 0 | 👎 Dislikes: 0\n"
+                f"👁 Views: 0\n"
+                f"👍 Likes: 0 | 👎 Dislikes: 0\n"
                 f"📌 Channel: **{channel_name}**\n\n"
-                f"💡 Video ID: `{video_id}`"
+                f"💡 Video ID: `{video_id}`\n"
             ),
             reply_markup=reply_markup
         )
-
         upload_state.pop(user_id, None)

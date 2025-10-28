@@ -4,37 +4,50 @@ from bot import MeTube
 from db import channels
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
-import requests
+import os
 
-def generate_channel_card(channel):
+# ---------------- GENERATE CHANNEL CARD ---------------- #
+async def generate_channel_card(client, channel):
     # Load Base Template
     base = Image.open("IMG_20251028_063529_945.jpg").convert("RGB")
     draw = ImageDraw.Draw(base)
 
+    # --- Load Banner (optional) ---
+    if channel.get("banner"):
+        try:
+            banner_path = await client.download_media(channel["banner"])
+            banner = Image.open(banner_path).convert("RGB").resize((1080, 300))
+            base.paste(banner, (0, 0))
+            os.remove(banner_path)
+        except Exception as e:
+            print("Banner error:", e)
+
     # --- Load Channel Profile Photo ---
     if channel.get("pic"):
         try:
-            r = requests.get(channel["pic"])
-            pfp = Image.open(BytesIO(r.content)).convert("RGB").resize((250, 250))
+            pic_path = await client.download_media(channel["pic"])
+            pfp = Image.open(pic_path).convert("RGB").resize((250, 250))
 
-            # Circle Mask for round dp
+            # Circle Mask for round DP
             mask = Image.new("L", (250, 250), 0)
             ImageDraw.Draw(mask).ellipse((0, 0, 250, 250), fill=255)
-            base.paste(pfp, (330, 100), mask) # Change position if needed
+
+            base.paste(pfp, (330, 350), mask)  # adjust position as needed
+            os.remove(pic_path)
         except Exception as e:
-            print(e)
+            print("Pic error:", e)
 
     # Fonts (Install DejaVu Sans on server if needed)
     font_title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 45)
     font_stats = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
 
     # --- Write Text on Image ---
-    draw.text((460, 145), f"{channel['channel_name']}", fill="black", font=font_title)
-    draw.text((460, 280), f"Channel ID: {channel['_id']}", fill="black", font=font_stats)
-    draw.text((460, 330), f"Videos: {channel['videos']}", fill="black", font=font_stats)
-    draw.text((460, 380), f"Subscribers: {channel['subscribers']}", fill="black", font=font_stats)
-    draw.text((460, 430), f"Views: {channel['total_views']}", fill="black", font=font_stats)
-    draw.text((460, 480), f"Likes: {channel['likes']}", fill="black", font=font_stats)
+    draw.text((460, 145), f"{channel['channel_name']}", fill="white", font=font_title)
+    draw.text((460, 280), f"Channel ID: {channel['_id']}", fill="white", font=font_stats)
+    draw.text((460, 280), f"Videos: {channel['videos']}", fill="white", font=font_stats)
+    draw.text((460, 280), f"Subscribers: {channel['subscribers']}", fill="white", font=font_stats)
+    draw.text((460, 280), f"Views: {channel['total_views']}", fill="white", font=font_stats)
+    draw.text((460, 280), f"Likes: {channel['likes']}", fill="white", font=font_stats)
 
     # Save Output
     output = BytesIO()
@@ -43,6 +56,8 @@ def generate_channel_card(channel):
     output.seek(0)
     return output
 
+
+# ---------------- COMMAND HANDLER ---------------- #
 @MeTube.on_message(filters.command("my_channel") & filters.private, group=5)
 async def my_channel(client, message):
     user_id = message.from_user.id
@@ -51,7 +66,7 @@ async def my_channel(client, message):
     if not channel:
         return await message.reply("❌ You haven't registered any channel yet!\nUse: `/register`")
 
-    card = generate_channel_card(channel)
+    card = await generate_channel_card(client, channel)
 
     await message.reply_photo(
         photo=card,

@@ -73,7 +73,7 @@ async def generate_channel_card(client, channel):
     draw.text((80, text_y + 45), f"Videos: {channel['videos']}", fill="black", font=font_box)
     draw.text((80, text_y + 90), f"Subscribers: {channel['subscribers']}", fill="black", font=font_box)
     draw.text((520, text_y + 45), f"Views: {channel['total_views']}", fill="black", font=font_box)
-    draw.text((520, text_y + 90), f"Likes: {channel['likes']}", fill="black", font=font_box)
+    draw.text((520, text_y + 90), f"Likes: {channel['total_likes']}", fill="black", font=font_box)
 
     # Save output
     output = BytesIO()
@@ -101,7 +101,7 @@ async def my_channel(client, message):
         f"🎬 **Videos:** {channel['videos']}\n"
         f"👥 **Subscribers:** {channel['subscribers']}\n"
         f"👀 **Views:** {channel['total_views']}\n"
-        f"❤️ **Likes:** {channel['likes']}\n"
+        f"❤️ **Likes:** {channel['total_likes']}\n"
         f"🆔 **Channel ID:** `{channel['_id']}`"
     )
 
